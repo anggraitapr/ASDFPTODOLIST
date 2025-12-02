@@ -6,6 +6,7 @@ class Task {
     LocalDate deadline;
     List<Task> subtasks = new ArrayList<>();
 
+    Status status = Status.PENDING;
     Task(String title, LocalDate deadline) {
         this.title = title;
         this.deadline = deadline;
@@ -32,6 +33,7 @@ public class Main {
             System.out.println("6. Edit Task / Subtask");
             System.out.println("7. Hapus Task / Subtask");
             System.out.println("8. Exit");
+            System.out.println("9. Tandai Task Selesai");
             System.out.print("Pilih menu: ");
             int ch = sc.nextInt(); sc.nextLine();
 
@@ -44,6 +46,7 @@ public class Main {
                 case 6 -> editMenu();
                 case 7 -> deleteMenu();
                 case 8 -> { System.out.println("Keluar..."); return; }
+                case 9 -> markTaskDone();
                 default -> System.out.println("Menu tidak valid.");
             }
         }
@@ -104,7 +107,7 @@ public class Main {
         rootTasks.sort(Comparator.comparing(t -> t.deadline));
 
         for (Task t : rootTasks) {
-            System.out.println("- " + t.title + " (deadline: " + t.deadline + ")");
+            System.out.println("- " + t.title + " (Deadline: " + t.deadline + ") " + progressBar(t.status));
         }
     }
 
@@ -120,6 +123,40 @@ public class Main {
             dfs(t, 0);
         }
     }
+    static void markTaskDone() {
+        if (rootTasks.isEmpty()) {
+            System.out.println("Belum ada task.");
+            return;
+        }
+
+        System.out.println("\nPilih task yang ingin ditandai selesai:");
+        for (int i = 0; i < rootTasks.size(); i++) {
+            System.out.println((i + 1) + ". " + rootTasks.get(i).title);
+        }
+
+        System.out.print("Pilih nomor: ");
+        int idx = sc.nextInt() - 1; sc.nextLine();
+
+        if (idx < 0 || idx >= rootTasks.size()) {
+            System.out.println("Pilihan salah.");
+            return;
+        }
+
+        Task t = rootTasks.get(idx);
+        t.status = Status.DONE;
+        System.out.println("Task \"" + t.title + "\" ditandai selesai!");
+    }
+    static String progressBar(Status status) {
+        switch (status) {
+            case DONE:
+                return Color.GREEN + "[##########] 100%" + Color.RESET;
+            case IN_PROGRESS:
+                return Color.YELLOW + "[#####-----] 50%" + Color.RESET;
+            default:
+                return Color.RED + "[##--------] 20%" + Color.RESET;
+        }
+    }
+
 
     static void dfs(Task t, int depth) {
         t.subtasks.sort(Comparator.comparing(s -> s.deadline));
