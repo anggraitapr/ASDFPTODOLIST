@@ -91,9 +91,15 @@ public class Main {
     static void showBFSTopLevel() {
         System.out.println("\n=== BFS (Level 1) ===");
 
-        rootTasks.sort(Comparator.comparing(t -> t.deadline));
+        bubbleSort(rootTasks);
 
+        Queue<Task> q = new LinkedList<>();
         for (Task t : rootTasks) {
+            q.add(t);
+        }
+
+        while (!q.isEmpty()) {
+            Task t = q.poll();
             System.out.println("- " + t.title +
                     " | Priority: " + coloredPriority(t.priority) +
                     " | Deadline: " + t.deadline +
@@ -105,24 +111,35 @@ public class Main {
     static void showDFSAll() {
         System.out.println("\n=== DFS (Semua Task) ===");
 
-        rootTasks.sort(Comparator.comparing(t -> t.deadline));
+        bubbleSort(rootTasks);
 
         for (Task t : rootTasks) {
-            dfs(t, 0);
+            dfs(t);
         }
     }
 
-    static void dfs(Task t, int depth) {
-        t.subtasks.sort(Comparator.comparing(s -> s.deadline));
+    static void dfs(Task start) {
+        Stack<Task> stack = new Stack<>();
+        Stack<Integer> depthStack = new Stack<>();
 
-        String indent = " ".repeat(depth * 2);
+        stack.push(start);
+        depthStack.push(0);
 
-        System.out.println(indent + "- " + t.title +
-                " | " + coloredPriority(t.priority) +
-                " | deadline: " + t.deadline);
+        while (!stack.isEmpty()) {
+            Task t = stack.pop();
+            int depth = depthStack.pop();
 
-        for (Task st : t.subtasks) {
-            dfs(st, depth + 1);
+            String indent = " ".repeat(depth * 2);
+            System.out.println(indent + "- " + t.title +
+                    " | " + coloredPriority(t.priority) +
+                    " | Deadline: " + t.deadline);
+
+            bubbleSort(t.subtasks);
+
+            for (int i = t.subtasks.size() - 1; i >= 0; i--) {
+                stack.push(t.subtasks.get(i));
+                depthStack.push(depth + 1);
+            }
         }
     }
 
@@ -147,7 +164,7 @@ public class Main {
         }
 
         System.out.println("\n--- Detail Task (DFS) ---");
-        dfs(rootTasks.get(idx), 0);
+        dfs(rootTasks.get(idx));
     }
 
     // ========================= EDIT MENU =========================
@@ -373,5 +390,18 @@ public class Main {
             case "easy" -> Color.GREEN + "Easy" + Color.RESET;
             default -> p;
         };
+    }
+
+    static void bubbleSort(List<Task> list) {
+        int n = list.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (list.get(j).deadline.isAfter(list.get(j + 1).deadline)) {
+                    Task temp = list.get(j);
+                    list.set(j, list.get(j + 1));
+                    list.set(j + 1, temp);
+                }
+            }
+        }
     }
 }
