@@ -5,48 +5,39 @@ import java.util.List;
 public class Task {
     String title;
     LocalDate deadline;
-    String priority;   // "high", "medium", "easy"
-    Status status;     // IN_PROGRESS, DONE
+    String priority;
+    Status status;
+    int progress;
     List<Task> subtasks;
 
-    public Task(String title, LocalDate deadline, String priority) {
+    public Task(String title, LocalDate deadline, String priority, Status status) {
         this.title = title;
         this.deadline = deadline;
         this.priority = priority;
-        this.status = Status.IN_PROGRESS;
+        this.status = status;
         this.subtasks = new ArrayList<>();
+        updateProgress();
     }
 
     public void addSubtask(Task sub) {
         subtasks.add(sub);
+        updateProgress();
     }
 
-    public List<Task> getSubtasks() {
-        return subtasks;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public LocalDate getDeadline() {
-        return deadline;
-    }
-
-    public String getPriority() {
-        return priority;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status newStatus) {
-        this.status = newStatus;
-    }
-
-    @Override
-    public String toString() {
-        return title + " (" + priority + ") - " + status;
+    public void updateProgress() {
+        if (subtasks.isEmpty()) {
+            progress = switch (status) {
+                case DONE -> 100;
+                case IN_PROGRESS -> 50;
+                default -> 0;
+            };
+        } else {
+            int done = 0;
+            for (Task t : subtasks) if (t.status == Status.DONE) done++;
+            progress = (int) ((done * 100.0) / subtasks.size());
+            if (progress == 100) status = Status.DONE;
+            else if (progress > 0) status = Status.IN_PROGRESS;
+            else status = Status.PENDING;
+        }
     }
 }

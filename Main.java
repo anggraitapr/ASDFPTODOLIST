@@ -2,76 +2,82 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Main {
-
     static Scanner sc = new Scanner(System.in);
     static List<Task> rootTasks = new ArrayList<>();
 
     public static void main(String[] args) {
         while (true) {
-            System.out.println("\n===== TO-DO LIST MENU =====");
+            System.out.println("\n===== MENU TO-DO LIST =====");
             System.out.println("1. Tambah Task Utama");
             System.out.println("2. Tambah Subtask");
-            System.out.println("3. Tampilkan Task (BFS - Level 1)");
-            System.out.println("4. Tampilkan Task (DFS - Semua)");
-            //System.out.println("5. Tampilkan Semua Task");
-            System.out.println("5. Edit Task");
-            System.out.println("6. Hapus Task");
-            System.out.println("7. Exit");
-            System.out.println("8. Tandai Task Selesai");
-            System.out.print("Pilih menu: ");
-            int ch = sc.nextInt(); sc.nextLine();
+            System.out.println("3. Tampilkan BFS Level 1");
+            System.out.println("4. Tampilkan DFS Semua Task");
+            System.out.println("5. Edit Task/Subtask");
+            System.out.println("6. Hapus Task/Subtask");
+            System.out.println("7. Statistik");
+            System.out.println("8. Exit");
+            System.out.print("Pilih: ");
+            int choice = sc.nextInt(); sc.nextLine();
 
-            switch (ch) {
+            switch (choice) {
                 case 1 -> addRootTask();
                 case 2 -> addSubtask();
                 case 3 -> showBFSTopLevel();
                 case 4 -> showDFSAll();
-                //case 5 -> showCombined();
-                case 6 -> editMenu();
-                case 7 -> deleteMenu();
+                case 5 -> editMenu();
+                case 6 -> deleteMenu();
+                case 7 -> showStatistics();
                 case 8 -> { System.out.println("Keluar..."); return; }
-                case 9 -> markTaskDone();
-                default -> System.out.println("Menu tidak valid.");
+                default -> System.out.println("Pilihan salah!");
             }
         }
     }
 
-    // ========================= ADD ROOT TASK =========================
+    static Status parseStatus(String s) {
+        if (s == null) return Status.PENDING;
+        s = s.trim().toLowerCase();
+        return switch (s) {
+            case "done" -> Status.DONE;
+            case "in progress", "inprogress" -> Status.IN_PROGRESS;
+            default -> Status.PENDING;
+        };
+    }
+
+    // add task
     static void addRootTask() {
-        System.out.print("Judul task: ");
+        System.out.print("Judul: ");
         String title = sc.nextLine();
 
         System.out.print("Deadline (YYYY-MM-DD): ");
         LocalDate dl = LocalDate.parse(sc.nextLine());
 
-        // optional: input priority (if Task constructor supports it)
-        System.out.print("Priority (high / medium / easy): ");
+        System.out.print("Priority (high/medium/easy): ");
         String pr = sc.nextLine();
-        if (pr == null || pr.isBlank()) pr = "easy";
+        if (pr.isBlank()) pr = "easy";
 
-        rootTasks.add(new Task(title, dl, pr));  // assume Task has constructor Task(String, LocalDate, String)
-        System.out.println("Task utama ditambahkan!");
+        System.out.print("Status (Pending/In Progress/Done): ");
+        Status st = parseStatus(sc.nextLine());
+        rootTasks.add(new Task(title, dl, pr, st));
+
+        System.out.println("Task utama berhasil ditambahkan!");
     }
 
-    // ========================= ADD SUBTASK =========================
     static void addSubtask() {
         if (rootTasks.isEmpty()) {
             System.out.println("Belum ada task utama.");
             return;
         }
+        for (int i=0;i<rootTasks.size();i++)
+            System.out.println((i+1)+". "+rootTasks.get(i).title);
 
-        System.out.println("\nDaftar Task Utama:");
-        for (int i = 0; i < rootTasks.size(); i++) {
-            System.out.println((i + 1) + ". " + rootTasks.get(i).title);
-        }
+            System.out.print("Pilih task utama: ");
+            int idx = sc.nextInt()-1; sc.nextLine();
 
-        System.out.print("Pilih task utama: ");
-        int idx = sc.nextInt() - 1; sc.nextLine();
-
-        if (idx < 0 || idx >= rootTasks.size()) {
-            System.out.println("Pilihan salah");
+        if (idx<0||idx>=rootTasks.size()){
+            System.out.println("Salah pilih");
             return;
         }
+        Task parent = rootTasks.get(idx);
 
         System.out.print("Judul subtask: ");
         String title = sc.nextLine();
@@ -79,328 +85,243 @@ public class Main {
         System.out.print("Deadline (YYYY-MM-DD): ");
         LocalDate dl = LocalDate.parse(sc.nextLine());
 
-        System.out.print("Priority (high / medium / easy): ");
+        System.out.print("Priority (high/medium/easy): ");
         String pr = sc.nextLine();
-        if (pr == null || pr.isBlank()) pr = "easy";
 
-        rootTasks.get(idx).addSubtask(new Task(title, dl, pr)); // assume Task has constructor Task(String, LocalDate, String)
-        System.out.println("Subtask ditambahkan!");
+        if (pr.isBlank()) pr="easy";
+        System.out.print("Status (Pending/In Progress/Done): ");
+        Status st = parseStatus(sc.nextLine());
+
+        parent.addSubtask(new Task(title, dl, pr, st));
+        System.out.println("Subtask berhasil ditambahkan!");
     }
 
-    // ========================= BFS =========================
+    // show task
     static void showBFSTopLevel() {
-        System.out.println("\n=== BFS (Level 1) ===");
-
+        System.out.println("\n=== BFS Level 1 ===");
         bubbleSort(rootTasks);
-
-        Queue<Task> q = new LinkedList<>();
-        for (Task t : rootTasks) {
-            q.add(t);
-        }
-
-        while (!q.isEmpty()) {
-            Task t = q.poll();
-            System.out.println("- " + t.title +
-                    " | Priority: " + coloredPriority(t.priority) +
-                    " | Deadline: " + t.deadline +
-                    " " + progressBar(t.status));
-        }
+        for (Task t: rootTasks)
+            System.out.println("- "+t.title+" | "+Color.coloredPriority(t.priority)+" | "+
+                    t.deadline+" | "+t.status+" | Progress: "+t.progress+"%");
     }
 
-    // ========================= DFS =========================
     static void showDFSAll() {
-        System.out.println("\n=== DFS (Semua Task) ===");
-
+        System.out.println("\n=== DFS Semua Task ===");
         bubbleSort(rootTasks);
-
-        for (Task t : rootTasks) {
-            dfs(t);
-        }
+        for (Task t: rootTasks) dfs(t,0);
     }
 
-    static void dfs(Task start) {
-        System.out.println("\n=== DFS (Semua Task) ===");
-        Stack<Task> stack = new Stack<>();
-        Stack<Integer> depthStack = new Stack<>();
-
-        stack.push(start);
-        depthStack.push(0);
-
-        while (!stack.isEmpty()) {
-            Task t = stack.pop();
-            int depth = depthStack.pop();
-
-            String indent = " ".repeat(depth * 2);
-            System.out.println(indent + "- " + t.title +
-                    " | " + coloredPriority(t.priority) +
-                    " | Deadline: " + t.deadline);
-
-            bubbleSort(t.subtasks);
-
-            for (int i = t.subtasks.size() - 1; i >= 0; i--) {
-                stack.push(t.subtasks.get(i));
-                depthStack.push(depth + 1);
-            }
-        }
+    static void dfs(Task t,int depth){
+        System.out.println(" ".repeat(depth*2)+"- "+t.title+" | "+Color.coloredPriority(t.priority)+" | "+t.deadline+" | "+t.status+" | Progress: "+t.progress+"%");
+        bubbleSort(t.subtasks);
+        for (Task s:t.subtasks) dfs(s,depth+1);
     }
 
-    // =================== KOMBINASI BFS + DFS ===================
-//    static void showCombined() {
-//        System.out.println("\n=== Kombinasi BFS + DFS ===");
-//
-//        rootTasks.sort(Comparator.comparing(t -> t.deadline));
-//
-//        System.out.println("\n--- Tugas Level 1 (BFS) ---");
-//        for (int i = 0; i < rootTasks.size(); i++) {
-//            System.out.println((i + 1) + ". " + rootTasks.get(i).title +
-//                    " (" + coloredPriority(rootTasks.get(i).priority) + ")");
-//        }
-//
-//        System.out.print("\nLihat detail task nomor: ");
-//        int idx = sc.nextInt() - 1; sc.nextLine();
-//
-//        if (idx < 0 || idx >= rootTasks.size()) {
-//            System.out.println("Pilihan tidak valid.");
-//            return;
-//        }
-
-//        System.out.println("\n--- Detail Task (DFS) ---");
-//        dfs(rootTasks.get(idx));
-//    }
-
-    // ========================= EDIT MENU =========================
+    // edit menu
     static void editMenu() {
         if (rootTasks.isEmpty()) {
             System.out.println("Belum ada task.");
             return;
         }
-
-        System.out.println("\nEdit apa?");
-        System.out.println("1. Task Utama");
-        System.out.println("2. Subtask Level 1");
-        System.out.print("Pilih: ");
-        int c = sc.nextInt(); sc.nextLine();
-
-        if (c == 1) editRootTask();
-        else if (c == 2) editSubtask();
-        else System.out.println("Pilihan salah.");
+        System.out.println("1. Edit Task Utama\n2. Edit Subtask");
+        int c=sc.nextInt();
+        sc.nextLine();
+        if(c==1)
+            editRootTask();
+        else if(c==2)
+            editSubtask();
     }
 
-    // ----- EDIT ROOT TASK -----
     static void editRootTask() {
-        System.out.println("\nDaftar Task Utama:");
-        for (int i = 0; i < rootTasks.size(); i++) {
-            System.out.println((i + 1) + ". " + rootTasks.get(i).title);
-        }
+        for(int i=0;i<rootTasks.size();i++)
+            System.out.println((i+1)+". "+rootTasks.get(i).title);
+            System.out.print("Pilih task: ");
 
-        System.out.print("Pilih task: ");
-        int idx = sc.nextInt() - 1; sc.nextLine();
-
-        if (idx < 0 || idx >= rootTasks.size()) {
-            System.out.println("Salah pilih.");
+            int idx=sc.nextInt()-1;
+            sc.nextLine();
+        if(idx<0||idx>=rootTasks.size()){
+            System.out.println("Salah pilih");
             return;
         }
-
-        Task t = rootTasks.get(idx);
+        Task t=rootTasks.get(idx);
 
         System.out.print("Judul baru: ");
-        t.title = sc.nextLine();
+        t.title=sc.nextLine();
 
         System.out.print("Deadline baru (YYYY-MM-DD): ");
-        t.deadline = LocalDate.parse(sc.nextLine());
+        t.deadline=LocalDate.parse(sc.nextLine());
 
-        System.out.print("Priority baru (high / medium / easy): ");
-        String newPr = sc.nextLine();
-        if (newPr != null && !newPr.isBlank()) t.priority = newPr;
+        System.out.print("Priority baru: ");
+        String pr=sc.nextLine(); if(!pr.isBlank()) t.priority=pr;
 
+        System.out.print("Status baru: ");
+        t.status=parseStatus(sc.nextLine());
+
+        t.updateProgress();
         System.out.println("Task berhasil diedit!");
     }
 
-    // ----- EDIT SUBTASK -----
     static void editSubtask() {
-        System.out.println("\nDaftar Task Utama:");
-        for (int i = 0; i < rootTasks.size(); i++) {
-            System.out.println((i + 1) + ". " + rootTasks.get(i).title);
-        }
+        for(int i=0;i<rootTasks.size();i++)
+            System.out.println((i+1)+". "+rootTasks.get(i).title);
 
         System.out.print("Pilih task utama: ");
-        int idx = sc.nextInt() - 1; sc.nextLine();
+        int idx=sc.nextInt()-1; sc.nextLine();
 
-        if (idx < 0 || idx >= rootTasks.size()) {
-            System.out.println("Salah pilih.");
+        if(idx<0||idx>=rootTasks.size()){
+            System.out.println("Salah pilih");
             return;
         }
-
-        Task parent = rootTasks.get(idx);
-
-        if (parent.subtasks.isEmpty()) {
-            System.out.println("Task ini tidak punya subtask.");
+        Task parent=rootTasks.get(idx);
+        if(parent.subtasks.isEmpty()){
+            System.out.println("Belum ada subtask.");
             return;
         }
-
-        System.out.println("\nSubtask:");
-        for (int i = 0; i < parent.subtasks.size(); i++) {
-            System.out.println((i + 1) + ". " + parent.subtasks.get(i).title);
-        }
+        for(int i=0;i<parent.subtasks.size();i++)
+            System.out.println((i+1)+". "+parent.subtasks.get(i).title);
 
         System.out.print("Pilih subtask: ");
-        int sidx = sc.nextInt() - 1; sc.nextLine();
+        int sidx=sc.nextInt()-1; sc.nextLine();
 
-        if (sidx < 0 || sidx >= parent.subtasks.size()) {
-            System.out.println("Salah pilih.");
+        if(sidx<0||sidx>=parent.subtasks.size()){
+            System.out.println("Salah pilih");
             return;
         }
-
-        Task sub = parent.subtasks.get(sidx);
+        Task t=parent.subtasks.get(sidx);
 
         System.out.print("Judul baru: ");
-        sub.title = sc.nextLine();
+        t.title=sc.nextLine();
 
-        System.out.print("Deadline baru (YYYY-MM-DD): ");
-        sub.deadline = LocalDate.parse(sc.nextLine());
+        System.out.print("Deadline baru: ");
+        t.deadline=LocalDate.parse(sc.nextLine());
 
-        System.out.print("Priority baru (high / medium / easy): ");
-        String newPr = sc.nextLine();
-        if (newPr != null && !newPr.isBlank()) sub.priority = newPr;
+        System.out.print("Priority baru: ");
+        String pr=sc.nextLine();
+        if(!pr.isBlank()) t.priority=pr;
+
+        System.out.print("Status baru: ");
+        t.status=parseStatus(sc.nextLine());
+        t.updateProgress(); parent.updateProgress();
 
         System.out.println("Subtask berhasil diedit!");
     }
 
-    // ============================================================
-    //                   DELETE MENU
-    // ============================================================
+    // delete
     static void deleteMenu() {
-        if (rootTasks.isEmpty()) {
-            System.out.println("Belum ada task.");
-            return;
-        }
+        if(rootTasks.isEmpty()){
+            System.out.println("Belum ada task."); return;}
 
-        System.out.println("\nHapus apa?");
-        System.out.println("1. Task Utama");
-        System.out.println("2. Subtask Level 1");
-        System.out.print("Pilih: ");
-        int c = sc.nextInt(); sc.nextLine();
+        System.out.println("1. Hapus Task Utama\n2. Hapus Subtask");
+        int c=sc.nextInt();
+        sc.nextLine();
 
-        if (c == 1) deleteRootTask();
-        else if (c == 2) deleteSubtask();
-        else System.out.println("Pilihan salah.");
+        if(c==1)
+            deleteRootTask();
+        else if(c==2)
+            deleteSubtask();
     }
 
-    // ----- DELETE ROOT TASK -----
-    static void deleteRootTask() {
-        System.out.println("\nDaftar Task Utama:");
-        for (int i = 0; i < rootTasks.size(); i++) {
-            System.out.println((i + 1) + ". " + rootTasks.get(i).title);
-        }
+    static void deleteRootTask(){
+        for(int i=0;i<rootTasks.size();i++)
+            System.out.println((i+1)+". "+rootTasks.get(i).title);
 
-        System.out.print("Pilih task yang ingin dihapus: ");
-        int idx = sc.nextInt() - 1; sc.nextLine();
+        System.out.print("Pilih task untuk dihapus: ");
+        int idx=sc.nextInt()-1; sc.nextLine();
 
-        if (idx < 0 || idx >= rootTasks.size()) {
-            System.out.println("Salah pilih.");
+        if(idx<0||idx>=rootTasks.size()){
+            System.out.println("Salah pilih");
             return;
         }
-
         rootTasks.remove(idx);
-        System.out.println("Task utama berhasil dihapus!");
+        System.out.println("Task utama dihapus!");
     }
 
-    // ----- DELETE SUBTASK -----
-    static void deleteSubtask() {
-        System.out.println("\nDaftar Task Utama:");
-        for (int i = 0; i < rootTasks.size(); i++) {
-            System.out.println((i + 1) + ". " + rootTasks.get(i).title);
-        }
+    static void deleteSubtask(){
+        for(int i=0;i<rootTasks.size();i++)
+            System.out.println((i+1)+". "+rootTasks.get(i).title);
 
         System.out.print("Pilih task utama: ");
-        int idx = sc.nextInt() - 1; sc.nextLine();
+        int idx=sc.nextInt()-1;
+        sc.nextLine();
 
-        if (idx < 0 || idx >= rootTasks.size()) {
-            System.out.println("Salah pilih.");
+        if(idx<0||idx>=rootTasks.size()){
+            System.out.println("Salah pilih");
             return;
         }
+        Task parent=rootTasks.get(idx);
 
-        Task parent = rootTasks.get(idx);
-
-        if (parent.subtasks.isEmpty()) {
-            System.out.println("Task ini tidak punya subtask.");
+        if(parent.subtasks.isEmpty()){
+            System.out.println("Belum ada subtask.");
             return;
         }
-
-        System.out.println("\nSubtask:");
-        for (int i = 0; i < parent.subtasks.size(); i++) {
-            System.out.println((i + 1) + ". " + parent.subtasks.get(i).title);
-        }
+        for(int i=0;i<parent.subtasks.size();i++)
+            System.out.println((i+1)+". "+parent.subtasks.get(i).title);
 
         System.out.print("Pilih subtask untuk dihapus: ");
-        int sidx = sc.nextInt() - 1; sc.nextLine();
-
-        if (sidx < 0 || sidx >= parent.subtasks.size()) {
-            System.out.println("Salah pilih.");
+        int sidx=sc.nextInt()-1; sc.nextLine();
+        if(sidx<0||sidx>=parent.subtasks.size()){
+            System.out.println("Salah pilih");
             return;
         }
-
         parent.subtasks.remove(sidx);
-        System.out.println("Subtask berhasil dihapus!");
+        parent.updateProgress();
+        System.out.println("Subtask dihapus!");
     }
 
-    // ========================= MARK DONE =========================
-    static void markTaskDone() {
-        if (rootTasks.isEmpty()) {
-            System.out.println("Belum ada task.");
-            return;
-        }
+    // statistik
+    static void showStatistics(){
+        int totalRoot=rootTasks.size(),
+                totalSub=0,
+                totalDone=0,
+                totalAll=0;
+        List<Task> overdue=new ArrayList<>();
+        Task nearest=null;
+        long nearestDays=Long.MAX_VALUE;
 
-        System.out.println("\nPilih task yang ingin ditandai selesai:");
-        for (int i = 0; i < rootTasks.size(); i++) {
-            System.out.println((i + 1) + ". " + rootTasks.get(i).title);
-        }
+        for(Task t:rootTasks){
+            totalAll++;
+            if(t.status==Status.DONE)
+                totalDone++;
+            if(t.deadline.isBefore(LocalDate.now())&&t.status!=Status.DONE)
+                overdue.add(t);
+            long diff=java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), t.deadline);
 
-        System.out.print("Pilih nomor: ");
-        int idx = sc.nextInt() - 1; sc.nextLine();
-
-        if (idx < 0 || idx >= rootTasks.size()) {
-            System.out.println("Pilihan salah.");
-            return;
-        }
-
-        Task t = rootTasks.get(idx);
-        t.status = Status.DONE;
-        System.out.println("Task \"" + t.title + "\" ditandai selesai!");
-    }
-
-    static String progressBar(Status status) {
-        switch (status) {
-            case DONE:
-                return Color.GREEN + "DONE" + Color.RESET;
-            default:
-                return Color.RED + "IN PROGRESS" + Color.RESET;
-        }
-    }
-
-    // ====================== Priority ======================
-    static String coloredPriority(String p) {
-        if (p == null) return "";
-        p = p.trim().toLowerCase();
-
-        return switch (p) {
-            case "high" -> Color.RED + "HIGH" + Color.RESET;
-            case "medium" -> Color.YELLOW + "MEDIUM" + Color.RESET;
-            case "easy" -> Color.GREEN + "Easy" + Color.RESET;
-            default -> p;
-        };
-    }
-
-    static void bubbleSort(List<Task> list) {
-        int n = list.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (list.get(j).deadline.isAfter(list.get(j + 1).deadline)) {
-                    Task temp = list.get(j);
-                    list.set(j, list.get(j + 1));
-                    list.set(j + 1, temp);
-                }
+            if(diff>=0&&diff<nearestDays){
+                nearest=t;
+                nearestDays=diff;
+            }
+            for(Task s:t.subtasks){
+                totalSub++;
+                totalAll++;
+                if(s.status==Status.DONE)
+                    totalDone++;
+                if(s.deadline.isBefore(LocalDate.now())&&s.status!=Status.DONE)
+                    overdue.add(s);
+                long d=java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), s.deadline);
+                if(d>=0&&d<nearestDays){nearest=s; nearestDays=d;}
             }
         }
+        double percent=totalAll==0?0:(totalDone*100.0/totalAll);
+
+        System.out.println("\nTotal task utama: "+totalRoot);
+        System.out.println("Total subtask: "+totalSub);
+        System.out.println("Total semua task: "+totalAll);
+        System.out.println("Selesai: "+totalDone+" ("+(int)percent+"%) | Belum selesai: "+(100-(int)percent)+"%");
+
+        int filled=(int)Math.round(percent/10);
+        System.out.println("Progress: ["+"█".repeat(filled)+"░".repeat(10-filled)+"] "+(int)percent+"%");
+
+        if(nearest!=null)
+            System.out.println("Task dekat deadline: "+nearest.title+" ("+nearestDays+" hari lagi)");
+        if(!overdue.isEmpty()){
+            System.out.println("Task overdue:"); for(Task t:overdue) System.out.println("- "+t.title);}
+    }
+
+    static void bubbleSort(List<Task> list){
+        for(int i=0;i<list.size()-1;i++)
+            for(int j=0;j<list.size()-i-1;j++)
+                if(list.get(j).deadline.isAfter(list.get(j+1).deadline)){
+                    Task tmp=list.get(j); list.set(j,list.get(j+1)); list.set(j+1,tmp);
+                }
     }
 }

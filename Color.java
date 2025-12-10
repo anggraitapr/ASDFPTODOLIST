@@ -1,7 +1,12 @@
 public class Color {
-    static final String RESET = "\u001B[0m";
-    static final String RED = "\u001B[31m";
-    static final String GREEN = "\u001B[32m";
-    static final String YELLOW = "\u001B[33m";
-    static final String CYAN = "\u001B[36m";
+    public static String coloredPriority(String p) {
+        if (p == null) return "";
+        p = p.trim().toLowerCase();
+        return switch (p) {
+            case "high" -> "\u001B[31mHIGH\u001B[0m";     // merah
+            case "medium" -> "\u001B[33mMEDIUM\u001B[0m"; // kuning
+            case "easy" -> "\u001B[32mEASY\u001B[0m";     // hijau
+            default -> p;
+        };
+    }
 }
