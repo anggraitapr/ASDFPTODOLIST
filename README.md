@@ -11,8 +11,8 @@ Berikut adalah FP kami yang mengangkat tema To Do List sebagaimana yang tertera 
   - Bubble Sort sebagai algoritma sorting untuk mengurutkan task/subtask berdasarkan deadline [YYYY/MM/DD] terdekat.
   - DFS untuk menampilkan seluruh task sampai kedalaman paling dalam.
   - BFS untuk menampilkan task pada level pertama (utama).
-  - 
-3. Struktur Data:
+    
+2. Struktur Data:
      - Stack 
      - Queue
      - List
