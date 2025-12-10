@@ -4,7 +4,7 @@ Anggota:
 1. Anggraita Prabawati (5026241103)
 2. Widda Farrah Kayla (5026241119)
 3. Milawati (5026241163)
-4. Elfa Setiana (502624208)
+4. Elfa Setiana (5026241208)
 
 Berikut adalah FP kami yang mengangkat tema To Do List sebagaimana yang tertera pada GitHub. To Do List ini dibuat menggunakan:
 1. Algoritma:
