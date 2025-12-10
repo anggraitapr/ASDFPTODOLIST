@@ -369,8 +369,9 @@ public class Main {
         if(total==0) total=1; // agar tidak error
 
         System.out.println("\nPie Chart (Status Tasks):");
-        System.out.println("Done       : " + "█".repeat(done*20/total));
-        System.out.println("In Progress: " + "█".repeat(inProgress*20/total));
-        System.out.println("Pending    : " + "█".repeat(pending*20/total));
+        System.out.println("Done       : " + "\u001B[32m" + "█".repeat(done*20/total) + "\u001B[0m");
+        System.out.println("In Progress: " + "\u001B[33m" + "█".repeat(inProgress*20/total) + "\u001B[0m");
+        System.out.println("Pending    : " + "\u001B[31m" + "█".repeat(pending*20/total) + "\u001B[0m");
+
     }
 }
