@@ -26,7 +26,10 @@ public class Main {
                 case 4 -> showDFSAll();
                 case 5 -> editMenu();
                 case 6 -> deleteMenu();
-                case 7 -> showStatistics();
+                case 7 -> {
+                    showStatistics();
+                    showPieChartText(rootTasks);
+                }
                 case 8 -> { System.out.println("Keluar..."); return; }
                 default -> System.out.println("Pilihan salah!");
             }
@@ -100,20 +103,21 @@ public class Main {
     static void showBFSTopLevel() {
         System.out.println("\n=== BFS Level 1 ===");
         bubbleSort(rootTasks);
-        for (Task t: rootTasks)
-            System.out.println("- "+t.title+" | "+Color.coloredPriority(t.priority)+" | "+
-                    t.deadline+" | "+t.status+" | Progress: "+t.progress+"%");
+        for (Task t : rootTasks)
+            System.out.println("- " + t.title + " | " + Color.coloredPriority(t.priority) + " | " +
+                    t.deadline + " | " + Color.coloredStatus(t.status) + " | Progress: " + t.progress + "%");
+
     }
 
-    static void showDFSAll() {
+        static void showDFSAll() {
         System.out.println("\n=== DFS Semua Task ===");
         bubbleSort(rootTasks);
         for (Task t: rootTasks) dfs(t,0);
     }
 
     static void dfs(Task t,int depth){
-        System.out.println(" ".repeat(depth*2)+"- "+t.title+" | "+Color.coloredPriority(t.priority)+" | "+t.deadline+" | "+t.status+" | Progress: "+t.progress+"%");
-        bubbleSort(t.subtasks);
+            System.out.println(" ".repeat(depth*2)+"- "+t.title+" | "+Color.coloredPriority(t.priority)+" | "+t.deadline+" | "+Color.coloredStatus(t.status)+" | Progress: "+t.progress+"%");
+            bubbleSort(t.subtasks);
         for (Task s:t.subtasks) dfs(s,depth+1);
     }
 
@@ -269,59 +273,104 @@ public class Main {
     }
 
     // statistik
-    static void showStatistics(){
-        int totalRoot=rootTasks.size(),
-                totalSub=0,
-                totalDone=0,
-                totalAll=0;
-        List<Task> overdue=new ArrayList<>();
-        Task nearest=null;
-        long nearestDays=Long.MAX_VALUE;
+    static void showStatistics() {
+        int totalRoot = rootTasks.size(),
+                totalSub = 0,
+                totalDone = 0,
+                totalAll = 0;
+        List<Task> overdue = new ArrayList<>();
+        Task nearest = null;
+        long nearestDays = Long.MAX_VALUE;
 
-        for(Task t:rootTasks){
+        for (Task t : rootTasks) {
             totalAll++;
-            if(t.status==Status.DONE)
+            if (t.status == Status.DONE)
                 totalDone++;
-            if(t.deadline.isBefore(LocalDate.now())&&t.status!=Status.DONE)
+            if (t.deadline.isBefore(LocalDate.now()) && t.status != Status.DONE)
                 overdue.add(t);
-            long diff=java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), t.deadline);
+            long diff = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), t.deadline);
 
-            if(diff>=0&&diff<nearestDays){
-                nearest=t;
-                nearestDays=diff;
+            if (diff >= 0 && diff < nearestDays) {
+                nearest = t;
+                nearestDays = diff;
             }
-            for(Task s:t.subtasks){
+            for (Task s : t.subtasks) {
                 totalSub++;
                 totalAll++;
-                if(s.status==Status.DONE)
+                if (s.status == Status.DONE)
                     totalDone++;
-                if(s.deadline.isBefore(LocalDate.now())&&s.status!=Status.DONE)
+                if (s.deadline.isBefore(LocalDate.now()) && s.status != Status.DONE)
                     overdue.add(s);
-                long d=java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), s.deadline);
-                if(d>=0&&d<nearestDays){nearest=s; nearestDays=d;}
+                long d = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), s.deadline);
+                if (d >= 0 && d < nearestDays) {
+                    nearest = s;
+                    nearestDays = d;
+                }
             }
         }
-        double percent=totalAll==0?0:(totalDone*100.0/totalAll);
+        double percent = totalAll == 0 ? 0 : (totalDone * 100.0 / totalAll);
 
-        System.out.println("\nTotal task utama: "+totalRoot);
-        System.out.println("Total subtask: "+totalSub);
-        System.out.println("Total semua task: "+totalAll);
-        System.out.println("Selesai: "+totalDone+" ("+(int)percent+"%) | Belum selesai: "+(100-(int)percent)+"%");
+        System.out.println("\nTotal task utama: " + totalRoot);
+        System.out.println("Total subtask: " + totalSub);
+        System.out.println("Total semua task: " + totalAll);
+        System.out.println("Selesai: " + totalDone + " (" + (int) percent + "%) | Belum selesai: " + (100 - (int) percent) + "%");
 
-        int filled=(int)Math.round(percent/10);
-        System.out.println("Progress: ["+"█".repeat(filled)+"░".repeat(10-filled)+"] "+(int)percent+"%");
+        int filled = (int) Math.round(percent / 10);
 
-        if(nearest!=null)
-            System.out.println("Task dekat deadline: "+nearest.title+" ("+nearestDays+" hari lagi)");
-        if(!overdue.isEmpty()){
-            System.out.println("Task overdue:"); for(Task t:overdue) System.out.println("- "+t.title);}
+        String progressBar = "";
+        for (int i = 0; i < 10; i++) {
+            if (i < filled) {
+                if (percent < 40) progressBar += "\u001B[31m█\u001B[0m";    // merah
+                else if (percent < 70) progressBar += "\u001B[33m█\u001B[0m"; // kuning
+                else progressBar += "\u001B[32m█\u001B[0m";                  // hijau
+            } else {
+                progressBar += "░"; // blok kosong tetap
+            }
+        }
+
+        System.out.println("Progress: [" + progressBar + "] " + (int)percent + "%");
+
+
+        if (nearest != null)
+            System.out.println("Task dekat deadline: " + nearest.title + " (" + nearestDays + " hari lagi)");
+        if (!overdue.isEmpty()) {
+            System.out.println("Task overdue:");
+            for (Task t : overdue)
+                System.out.println("- " + t.title + " | " + Color.coloredStatus(t.status));
+        }
     }
 
-    static void bubbleSort(List<Task> list){
+            static void bubbleSort(List<Task> list){
         for(int i=0;i<list.size()-1;i++)
             for(int j=0;j<list.size()-i-1;j++)
                 if(list.get(j).deadline.isAfter(list.get(j+1).deadline)){
                     Task tmp=list.get(j); list.set(j,list.get(j+1)); list.set(j+1,tmp);
                 }
+    }
+    static void showPieChartText(List<Task> tasks){
+        int done=0, inProgress=0, pending=0;
+
+        for(Task t: tasks){
+            switch(t.status){
+                case DONE -> done++;
+                case IN_PROGRESS -> inProgress++;
+                case PENDING -> pending++;
+            }
+            for(Task s: t.subtasks){
+                switch(s.status){
+                    case DONE -> done++;
+                    case IN_PROGRESS -> inProgress++;
+                    case PENDING -> pending++;
+                }
+            }
+        }
+
+        int total = done + inProgress + pending;
+        if(total==0) total=1; // agar tidak error
+
+        System.out.println("\nPie Chart (Status Tasks):");
+        System.out.println("Done       : " + "█".repeat(done*20/total));
+        System.out.println("In Progress: " + "█".repeat(inProgress*20/total));
+        System.out.println("Pending    : " + "█".repeat(pending*20/total));
     }
 }
