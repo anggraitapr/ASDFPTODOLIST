@@ -6,14 +6,14 @@ public class Task {
     String title;
     LocalDate deadline;
     String priority;   // "high", "medium", "easy"
-    Status status;     // PENDING, IN_PROGRESS, DONE
+    Status status;     // IN_PROGRESS, DONE
     List<Task> subtasks;
 
     public Task(String title, LocalDate deadline, String priority) {
         this.title = title;
         this.deadline = deadline;
         this.priority = priority;
-        this.status = Status.PENDING;
+        this.status = Status.IN_PROGRESS;
         this.subtasks = new ArrayList<>();
     }
 

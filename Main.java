@@ -13,9 +13,9 @@ public class Main {
             System.out.println("2. Tambah Subtask");
             System.out.println("3. Tampilkan Task (BFS - Level 1)");
             System.out.println("4. Tampilkan Task (DFS - Semua)");
-            System.out.println("5. Tampilkan (Kombinasi)");
-            System.out.println("6. Edit Task / Subtask");
-            System.out.println("7. Hapus Task / Subtask");
+            //System.out.println("5. Tampilkan Semua Task");
+            System.out.println("6. Edit Task");
+            System.out.println("7. Hapus Task");
             System.out.println("8. Exit");
             System.out.println("9. Tandai Task Selesai");
             System.out.print("Pilih menu: ");
@@ -26,7 +26,7 @@ public class Main {
                 case 2 -> addSubtask();
                 case 3 -> showBFSTopLevel();
                 case 4 -> showDFSAll();
-                case 5 -> showCombined();
+                //case 5 -> showCombined();
                 case 6 -> editMenu();
                 case 7 -> deleteMenu();
                 case 8 -> { System.out.println("Keluar..."); return; }
@@ -119,6 +119,7 @@ public class Main {
     }
 
     static void dfs(Task start) {
+        System.out.println("\n=== DFS (Semua Task) ===");
         Stack<Task> stack = new Stack<>();
         Stack<Integer> depthStack = new Stack<>();
 
@@ -144,28 +145,28 @@ public class Main {
     }
 
     // =================== KOMBINASI BFS + DFS ===================
-    static void showCombined() {
-        System.out.println("\n=== Kombinasi BFS + DFS ===");
+//    static void showCombined() {
+//        System.out.println("\n=== Kombinasi BFS + DFS ===");
+//
+//        rootTasks.sort(Comparator.comparing(t -> t.deadline));
+//
+//        System.out.println("\n--- Tugas Level 1 (BFS) ---");
+//        for (int i = 0; i < rootTasks.size(); i++) {
+//            System.out.println((i + 1) + ". " + rootTasks.get(i).title +
+//                    " (" + coloredPriority(rootTasks.get(i).priority) + ")");
+//        }
+//
+//        System.out.print("\nLihat detail task nomor: ");
+//        int idx = sc.nextInt() - 1; sc.nextLine();
+//
+//        if (idx < 0 || idx >= rootTasks.size()) {
+//            System.out.println("Pilihan tidak valid.");
+//            return;
+//        }
 
-        rootTasks.sort(Comparator.comparing(t -> t.deadline));
-
-        System.out.println("\n--- Tugas Level 1 (BFS) ---");
-        for (int i = 0; i < rootTasks.size(); i++) {
-            System.out.println((i + 1) + ". " + rootTasks.get(i).title +
-                    " (" + coloredPriority(rootTasks.get(i).priority) + ")");
-        }
-
-        System.out.print("\nLihat detail task nomor: ");
-        int idx = sc.nextInt() - 1; sc.nextLine();
-
-        if (idx < 0 || idx >= rootTasks.size()) {
-            System.out.println("Pilihan tidak valid.");
-            return;
-        }
-
-        System.out.println("\n--- Detail Task (DFS) ---");
-        dfs(rootTasks.get(idx));
-    }
+//        System.out.println("\n--- Detail Task (DFS) ---");
+//        dfs(rootTasks.get(idx));
+//    }
 
     // ========================= EDIT MENU =========================
     static void editMenu() {
@@ -371,11 +372,9 @@ public class Main {
     static String progressBar(Status status) {
         switch (status) {
             case DONE:
-                return Color.GREEN + "[##########] 100%" + Color.RESET;
-            case IN_PROGRESS:
-                return Color.YELLOW + "[#####-----] 50%" + Color.RESET;
+                return Color.GREEN + "DONE" + Color.RESET;
             default:
-                return Color.RED + "[##--------] 20%" + Color.RESET;
+                return Color.RED + "IN PROGRESS" + Color.RESET;
         }
     }
 
