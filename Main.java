@@ -14,10 +14,10 @@ public class Main {
             System.out.println("3. Tampilkan Task (BFS - Level 1)");
             System.out.println("4. Tampilkan Task (DFS - Semua)");
             //System.out.println("5. Tampilkan Semua Task");
-            System.out.println("6. Edit Task");
-            System.out.println("7. Hapus Task");
-            System.out.println("8. Exit");
-            System.out.println("9. Tandai Task Selesai");
+            System.out.println("5. Edit Task");
+            System.out.println("6. Hapus Task");
+            System.out.println("7. Exit");
+            System.out.println("8. Tandai Task Selesai");
             System.out.print("Pilih menu: ");
             int ch = sc.nextInt(); sc.nextLine();
 
