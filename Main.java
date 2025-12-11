@@ -317,18 +317,34 @@ public class Main {
 
         int filled = (int) Math.round(percent / 10);
 
-        String progressBar = "";
-        for (int i = 0; i < 10; i++) {
-            if (i < filled) {
-                if (percent < 40) progressBar += "\u001B[31m█\u001B[0m";    // merah
-                else if (percent < 70) progressBar += "\u001B[33m█\u001B[0m"; // kuning
-                else progressBar += "\u001B[32m█\u001B[0m";                  // hijau
-            } else {
-                progressBar += "░"; // blok kosong tetap
-            }
-        }
+//        String progressBar = "";
+//        for (int i = 0; i < 10; i++) {
+//            if (i < filled) {
+//                if (percent < 40) progressBar += "\u001B[31m█\u001B[0m";    // merah
+//                else if (percent < 70) progressBar += "\u001B[33m█\u001B[0m"; // kuning
+//                else progressBar += "\u001B[32m█\u001B[0m";                  // hijau
+//            } else {
+//                progressBar += "░"; // blok kosong tetap
+//            }
+//        }
+//
+//        System.out.println("Progress: [" + progressBar + "] " + (int)percent + "%");
+        int bars = 10;
+        int filledBars = (int) Math.round(percent / 10.0);
+        int emptyBars = bars - filledBars;
 
-        System.out.println("Progress: [" + progressBar + "] " + (int)percent + "%");
+        String color;
+        if (percent < 40) color = "\u001B[31m";      // merah
+        else if (percent < 70) color = "\u001B[33m"; // kuning
+        else color = "\u001B[32m";                  // hijau
+
+        String progressBar =
+                "[" +
+                        color + "█".repeat(filledBars) + "\u001B[0m" +
+                        "░".repeat(emptyBars) +
+                        "] " + (int) percent + "%";
+
+        System.out.println("Progress: " + progressBar);
 
 
         if (nearest != null)
