@@ -6,6 +6,8 @@ public class Main {
     static List<Task> rootTasks = new ArrayList<>();
 
     public static void main(String[] args) {
+
+        printBigTitle();
         while (true) {
             System.out.println("\n===== MENU TO-DO LIST =====");
             System.out.println("1. Tambah Task Utama");
@@ -28,12 +30,34 @@ public class Main {
                 case 6 -> deleteMenu();
                 case 7 -> {
                     showStatistics();
-                    showPieChartText(rootTasks);
+                    showBarChartText(rootTasks);
                 }
                 case 8 -> { System.out.println("Keluar..."); return; }
                 default -> System.out.println("Pilihan salah!");
             }
         }
+    }
+
+    //Nama FP
+    static void printBigTitle() {
+        String CYAN = "\u001B[36m";
+        String BOLD = "\u001B[1m";
+        String RESET = "\u001B[0m";
+
+        String[] banner = {
+                "   ████████   ██████       ██████     ██████     ██        ██  ████████ ████████  ",
+                "      ██     ██    ██      ██    ██  ██    ██    ██            ██          ██     ",
+                "      ██     ██    ██ ████ ██    ██  ██    ██    ██        ██  ████████    ██     ",
+                "      ██     ██    ██      ██    ██  ██    ██    ██        ██        ██    ██     ",
+                "      ██      ██████       ██████     ██████     ████████  ██  ████████    ██     ",
+                "                                                                                  ",
+                "                                " + BOLD + "TO-DO LIST" + RESET + CYAN + "        ",
+                "                                                                                  ",
+        };
+
+        System.out.println(CYAN + BOLD);
+        for (String line : banner) System.out.println(line);
+        System.out.println(RESET);
     }
 
     static Status parseStatus(String s) {
@@ -347,7 +371,7 @@ public class Main {
                     Task tmp=list.get(j); list.set(j,list.get(j+1)); list.set(j+1,tmp);
                 }
     }
-    static void showPieChartText(List<Task> tasks){
+    static void showBarChartText(List<Task> tasks){
         int done=0, inProgress=0, pending=0;
 
         for(Task t: tasks){
@@ -368,7 +392,7 @@ public class Main {
         int total = done + inProgress + pending;
         if(total==0) total=1; // agar tidak error
 
-        System.out.println("\nPie Chart (Status Tasks):");
+        System.out.println("\nBar Chart (Status Tasks):");
         System.out.println("Done       : " + "\u001B[32m" + "█".repeat(done*20/total) + "\u001B[0m");
         System.out.println("In Progress: " + "\u001B[33m" + "█".repeat(inProgress*20/total) + "\u001B[0m");
         System.out.println("Pending    : " + "\u001B[31m" + "█".repeat(pending*20/total) + "\u001B[0m");
