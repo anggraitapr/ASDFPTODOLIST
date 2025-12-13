@@ -16,5 +16,8 @@ Berikut adalah FP kami yang mengangkat tema To Do List sebagaimana yang tertera 
      - Stack 
      - Queue
      - List
-  
+
+Update
+11/12/2025 : 1. Class CoiceHandler dibuat untuk memisahkan dari Class Main
+             2. Perbaikan code Bubble Sort
 
