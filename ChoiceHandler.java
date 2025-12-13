@@ -292,7 +292,7 @@ public class ChoiceHandler {
         int emptyBars = bars - filledBars;
 
         String color;
-        if (percent < 40) color = "\u001B[31m";      // merah
+        if (percent < 40) color = "\u001B[31m";      // merahh
         else if (percent < 70) color = "\u001B[33m"; // kuning
         else color = "\u001B[32m";                  // hijau
 
