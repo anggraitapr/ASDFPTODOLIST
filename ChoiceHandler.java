@@ -349,7 +349,7 @@ public class ChoiceHandler {
         }
 
         int total = done + inProgress + pending;
-        if(total==0) total=1; // agar tidak error
+        if(total==0) total=1; // agar tidak terjadi error
 
         System.out.println("\nPie Chart (Status Tasks):");
         System.out.println("Done       : " + "\u001B[32m" + "█".repeat(done*20/total) + "\u001B[0m");
