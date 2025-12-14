@@ -1,3 +1,5 @@
+package ToDoList;
+
 import java.util.*;
 
 public class Main {
@@ -6,12 +8,12 @@ public class Main {
     public static void main(String[] args) {
         while (true) {
             System.out.println("\n===== MENU TO-DO LIST =====");
-            System.out.println("1. Tambah Task Utama");
+            System.out.println("1. Tambah ToDoList.Task Utama");
             System.out.println("2. Tambah Subtask");
-            System.out.println("3. Tampilkan Task Level 1");
-            System.out.println("4. Tampilkan Semua Task");
-            System.out.println("5. Edit Task/Subtask");
-            System.out.println("6. Hapus Task/Subtask");
+            System.out.println("3. Tampilkan ToDoList.Task Level 1");
+            System.out.println("4. Tampilkan Semua ToDoList.Task");
+            System.out.println("5. Edit ToDoList.Task/Subtask");
+            System.out.println("6. Hapus ToDoList.Task/Subtask");
             System.out.println("7. Statistik");
             System.out.println("8. Exit");
             System.out.print("Pilih: ");

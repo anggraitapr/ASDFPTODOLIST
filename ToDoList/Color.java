@@ -1,9 +1,11 @@
+package ToDoList;
+
 public class Color {
     public static String coloredStatus(Status s) {
         return switch (s) {
-            case PENDING -> "\u001B[32mPENDING\u001B[0m";       // hijau
-            case IN_PROGRESS -> "\u001B[33mIN PROGRESS\u001B[0m"; // kuning
-            case DONE -> "\u001B[31mDONE\u001B[0m";             // merah
+            case Status.PENDING -> "\u001B[32mPENDING\u001B[0m";       // hijau
+            case Status.IN_PROGRESS -> "\u001B[33mIN PROGRESS\u001B[0m"; // kuning
+            case Status.DONE -> "\u001B[31mDONE\u001B[0m";             // merah
         };
     }
 

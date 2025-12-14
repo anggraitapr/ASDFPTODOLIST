@@ -38,14 +38,14 @@ DFS (Menampilkan semua task): Menampilkan seluruh struktur task beserta subtask 
 
 2. Struktur Data
 
-Tree (Task & Subtask): Menyusun data tugas dalam bentuk hubungan bertingkat, di mana setiap task dapat memiliki subtask. Pengelompokan tugas secara terstruktur serta mendukung proses penelusuran data menggunakan algoritma DFS secara efisien.
+Tree (ToDoList.Task & Subtask): Menyusun data tugas dalam bentuk hubungan bertingkat, di mana setiap task dapat memiliki subtask. Pengelompokan tugas secara terstruktur serta mendukung proses penelusuran data menggunakan algoritma DFS secara efisien.
 
 List: Sistem To-Do List menggunakan struktur data List dengan implementasi ArrayList untuk menyimpan subtask. Struktur ini bersifat dinamis, berurutan, dan memudahkan proses traversal menggunakan algoritma DFS secara rekursif.
 
 ## Bukti Tampilan Program (Code)
-![Bubble Sort](File/BubbleSort.png)
+![Bubble Sort](../File/BubbleSort.png)
 
-![Class](File/Class.png)
+![Class](../File/Class.png)
 
 ## Riwayat Update Program
 Berikut adalah riwayat update yang kami lakukan. Seluruh riwayat update di bawah ini tidak memiliki perubahan tampilan pada output yang dihasilkan
@@ -59,5 +59,5 @@ Update 11/12/2025
 2. Untuk menampilkan task utama ternyata tidak perlu menggunakan BFS. Oleh karena itu, proyek kami pada akhirnya tidak menggunakan algoritma BFS
    
 Update 12/12/2025
-1. Class CoiceHandler dibuat untuk memisahkan code method setiap menu dari Class Main
+1. Class CoiceHandler dibuat untuk memisahkan code method setiap menu dari Class ToDoList.Main
 2. Perbaikan code Bubble Sort

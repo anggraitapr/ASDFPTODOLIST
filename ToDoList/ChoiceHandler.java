@@ -1,3 +1,5 @@
+package ToDoList;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -27,11 +29,11 @@ public class ChoiceHandler {
         String pr = sc.nextLine();
         if (pr.isBlank()) pr = "easy";
 
-        System.out.print("Status (Pending/In Progress/Done): ");
+        System.out.print("ToDoList.Status (Pending/In Progress/Done): ");
         Status st = parseStatus(sc.nextLine());
         rootTasks.add(new Task(title, dl, pr, st));
 
-        System.out.println("Task utama berhasil ditambahkan!");
+        System.out.println("ToDoList.Task utama berhasil ditambahkan!");
     }
 
     public void addSubtask() {
@@ -61,7 +63,7 @@ public class ChoiceHandler {
         String pr = sc.nextLine();
 
         if (pr.isBlank()) pr="easy";
-        System.out.print("Status (Pending/In Progress/Done): ");
+        System.out.print("ToDoList.Status (Pending/In Progress/Done): ");
         Status st = parseStatus(sc.nextLine());
 
         parent.addSubtask(new Task(title, dl, pr, st));
@@ -70,7 +72,7 @@ public class ChoiceHandler {
 
     // show task
     public void showTopLevel() {
-        System.out.println("\n=== Task Level 1 ===");
+        System.out.println("\n=== ToDoList.Task Level 1 ===");
         bubbleSort(rootTasks);
         for (Task t : rootTasks)
             System.out.println("- " + t.title + " | " + Color.coloredPriority(t.priority) + " | " +
@@ -79,13 +81,13 @@ public class ChoiceHandler {
     }
 
     public void showDFSAll() {
-        System.out.println("\n=== DFS Semua Task ===");
+        System.out.println("\n=== DFS Semua ToDoList.Task ===");
         bubbleSort(rootTasks);
         for (Task t: rootTasks) dfs(t,0);
     }
 
-    static void dfs(Task t,int depth){
-        System.out.println(" ".repeat(depth*2)+"- "+t.title+" | "+Color.coloredPriority(t.priority)+" | "+t.deadline+" | "+Color.coloredStatus(t.status)+" | Progress: "+t.progress+"%");
+    static void dfs(Task t, int depth){
+        System.out.println(" ".repeat(depth*2)+"- "+t.title+" | "+ Color.coloredPriority(t.priority)+" | "+t.deadline+" | "+ Color.coloredStatus(t.status)+" | Progress: "+t.progress+"%");
         bubbleSort(t.subtasks);
         for (Task s:t.subtasks) dfs(s,depth+1);
     }
@@ -96,7 +98,7 @@ public class ChoiceHandler {
             System.out.println("Belum ada task.");
             return;
         }
-        System.out.println("1. Edit Task Utama\n2. Edit Subtask");
+        System.out.println("1. Edit ToDoList.Task Utama\n2. Edit Subtask");
         int c=sc.nextInt();
         sc.nextLine();
         if(c==1)
@@ -127,11 +129,11 @@ public class ChoiceHandler {
         System.out.print("Priority baru: ");
         String pr=sc.nextLine(); if(!pr.isBlank()) t.priority=pr;
 
-        System.out.print("Status baru: ");
+        System.out.print("ToDoList.Status baru: ");
         t.status=parseStatus(sc.nextLine());
 
         t.updateProgress();
-        System.out.println("Task berhasil diedit!");
+        System.out.println("ToDoList.Task berhasil diedit!");
     }
 
     static void editSubtask() {
@@ -173,7 +175,7 @@ public class ChoiceHandler {
         String pr=sc.nextLine();
         if(!pr.isBlank()) t.priority=pr;
 
-        System.out.print("Status baru: ");
+        System.out.print("ToDoList.Status baru: ");
         t.status=parseStatus(sc.nextLine());
         t.updateProgress(); parent.updateProgress();
 
@@ -185,7 +187,7 @@ public class ChoiceHandler {
         if(rootTasks.isEmpty()){
             System.out.println("Belum ada task."); return;}
 
-        System.out.println("1. Hapus Task Utama\n2. Hapus Subtask");
+        System.out.println("1. Hapus ToDoList.Task Utama\n2. Hapus Subtask");
         int c=sc.nextInt();
         sc.nextLine();
 
@@ -207,7 +209,7 @@ public class ChoiceHandler {
             return;
         }
         rootTasks.remove(idx);
-        System.out.println("Task utama dihapus!");
+        System.out.println("ToDoList.Task utama dihapus!");
     }
 
     static void deleteSubtask(){
@@ -306,9 +308,9 @@ public class ChoiceHandler {
 
 
         if (nearest != null)
-            System.out.println("Task dekat deadline: " + nearest.title + " (" + nearestDays + " hari lagi)");
+            System.out.println("ToDoList.Task dekat deadline: " + nearest.title + " (" + nearestDays + " hari lagi)");
         if (!overdue.isEmpty()) {
-            System.out.println("Task overdue:");
+            System.out.println("ToDoList.Task overdue:");
             for (Task t : overdue)
                 System.out.println("- " + t.title + " | " + Color.coloredStatus(t.status));
         }
@@ -335,15 +337,15 @@ public class ChoiceHandler {
 
         for(Task t: rootTasks){
             switch(t.status){
-                case DONE -> done++;
-                case IN_PROGRESS -> inProgress++;
-                case PENDING -> pending++;
+                case Status.DONE -> done++;
+                case Status.IN_PROGRESS -> inProgress++;
+                case Status.PENDING -> pending++;
             }
             for(Task s: t.subtasks){
                 switch(s.status){
-                    case DONE -> done++;
-                    case IN_PROGRESS -> inProgress++;
-                    case PENDING -> pending++;
+                    case Status.DONE -> done++;
+                    case Status.IN_PROGRESS -> inProgress++;
+                    case Status.PENDING -> pending++;
                 }
             }
         }
@@ -351,7 +353,7 @@ public class ChoiceHandler {
         int total = done + inProgress + pending;
         if(total==0) total=1; // agar tidak terjadi error
 
-        System.out.println("\nPie Chart (Status Tasks):");
+        System.out.println("\nPie Chart (ToDoList.Status Tasks):");
         System.out.println("Done       : " + "\u001B[32m" + "█".repeat(done*20/total) + "\u001B[0m");
         System.out.println("In Progress: " + "\u001B[33m" + "█".repeat(inProgress*20/total) + "\u001B[0m");
         System.out.println("Pending    : " + "\u001B[31m" + "█".repeat(pending*20/total) + "\u001B[0m");
