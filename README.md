@@ -5,7 +5,7 @@ Dosen Pengampu: Renny Pradina Kusumawardani
 
 Kelas: D
 
-Kelompok: 10
+Kelompok: 6
 
 | No | Nama                | NRP     |
 | -- | ------------------- | ------- |
