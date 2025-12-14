@@ -13,7 +13,7 @@ Kelompok: 10
 
 ## Latar Belakang
 Pengelolaan tugas yang terstruktur menjadi kebutuhan penting agar berbagai pekerjaan dapat diselesaikan secara efektif dan tepat waktu. Dalam aktivitas akademik maupun sehari-hari, sering kali satu tugas utama memiliki beberapa subtask dengan tingkat prioritas dan batas waktu yang berbeda, sehingga diperlukan sistem yang mampu mengorganisasi tugas secara jelas dan sistematis.
-TO-DO LIST digunakan sebagai sistem pencatatan tugas yang membantu pengguna mengelola task dan subtask, menentukan prioritas berdasarkan tingkatan level, serta menampilkan deadline terdekat. Dengan penerapan struktur data dan algoritma seperti Tree, Breadth First Search (BFS), Depth First Search (DFS), dan Sorting, sistem ini mampu menampilkan hubungan hierarki tugas secara jelas, menyusun prioritas secara sistematis, serta menampilkan tugas berdasarkan deadline terdekat sehingga pengelolaan tugas dapat dilakukan secara lebih optimal dan terencana.
+TO-DO LIST digunakan sebagai sistem pencatatan tugas yang membantu pengguna mengelola task dan subtask, menentukan prioritas berdasarkan tingkatan level, serta menampilkan deadline terdekat. Dengan penerapan struktur data dan algoritma seperti Depth First Search (DFS), dan Sorting, sistem ini mampu menampilkan hubungan hierarki tugas secara jelas, menyusun prioritas secara sistematis, serta menampilkan tugas berdasarkan deadline terdekat sehingga pengelolaan tugas dapat dilakukan secara lebih optimal dan terencana.
 
 ## Solusi yang Ditawarkan
 Solusi yang ditawarkan adalah sebuah program To-Do List yang menggunakan struktur data Tree untuk menampilkan hubungan antara task dan subtask secara terstruktur. Penerapan algoritma DFS untuk menampilkan detail task dan subtask, serta algoritma Sorting untuk mengurutkan task berdasarkan deadline terdekat. Dengan solusi ini, pengguna dapat lebih mudah menentukan prioritas dan mengelola tugas secara efektif.
@@ -35,19 +35,20 @@ Tree (Task & Subtask): Menyusun data tugas dalam bentuk hubungan bertingkat, di 
 List: Sistem To-Do List menggunakan struktur data List dengan implementasi ArrayList untuk menyimpan subtask. Struktur ini bersifat dinamis, berurutan, dan memudahkan proses traversal menggunakan algoritma DFS secara rekursif.
 
 ## Bukti Tampilan Program (Code)
-
+![Bubble Sort](file/BubbleSort.png)
+![Class](file/Class.png)
 
 ## Riwayat Update Program
 Berikut adalah riwayat update yang kami lakukan. Seluruh riwayat update di bawah ini tidak memiliki perubahan tampilan pada output yang dihasilkan
 
-    Update 10/12/2025
+Update 10/12/2025
 1. Mengubah implementasi BFS menjadi menggunakan struktur data Queue (sekarang tidak menggunakan BFS)
 2. Mengubah implementasi DFS menjadi menggunakan struktur data Stack (sekarang diubah menjadi DFS rekursif)
 
-    Update 11/12/2025
+Update 11/12/2025
 1. DFS menggunakan stack diubah menjadi penggunaan DFS rekursif
 2. Untuk menampilkan task utama ternyata tidak perlu menggunakan BFS. Oleh karena itu, proyek kami pada akhirnya tidak menggunakan algoritma BFS
    
-    Update 12/12/2025
+Update 12/12/2025
 1. Class CoiceHandler dibuat untuk memisahkan code method setiap menu dari Class Main
 2. Perbaikan code Bubble Sort
