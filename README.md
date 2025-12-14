@@ -27,11 +27,15 @@ Fitur untuk menambahkan, menghapus, dan mengedit task serta sub-task
 
 ## Algoritma dan Struktur Data yang Digunakan
 1. Algoritma
+
 Bubble Sort (Deadline): Mengurutkan task dan subtask berdasarkan deadline terdekat. Pada program ini, algoritma Bubble Sort diterapkan agar task dengan batas waktu paling mendesak ditampilkan lebih awal, sehingga membantu pengguna dalam menentukan prioritas penyelesaian tugas.
+
 DFS (Menampilkan semua task): Menampilkan seluruh struktur task beserta subtask secara mendalam. DFS memungkinkan sistem menelusuri setiap task hingga ke level terdalam, sehingga pengguna dapat melihat detail dari setiap task dan subtask yang dimiliki.
 
 2. Struktur Data
+
 Tree (Task & Subtask): Menyusun data tugas dalam bentuk hubungan bertingkat, di mana setiap task dapat memiliki subtask. Pengelompokan tugas secara terstruktur serta mendukung proses penelusuran data menggunakan algoritma DFS secara efisien.
+
 List: Sistem To-Do List menggunakan struktur data List dengan implementasi ArrayList untuk menyimpan subtask. Struktur ini bersifat dinamis, berurutan, dan memudahkan proses traversal menggunakan algoritma DFS secara rekursif.
 
 ## Bukti Tampilan Program (Code)
