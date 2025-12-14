@@ -35,8 +35,9 @@ Tree (Task & Subtask): Menyusun data tugas dalam bentuk hubungan bertingkat, di 
 List: Sistem To-Do List menggunakan struktur data List dengan implementasi ArrayList untuk menyimpan subtask. Struktur ini bersifat dinamis, berurutan, dan memudahkan proses traversal menggunakan algoritma DFS secara rekursif.
 
 ## Bukti Tampilan Program (Code)
-![Bubble Sort](file/BubbleSort.png)
-![Class](file/Class.png)
+![Bubble Sort](File/BubbleSort.png)
+
+![Class](File/Class.png)
 
 ## Riwayat Update Program
 Berikut adalah riwayat update yang kami lakukan. Seluruh riwayat update di bawah ini tidak memiliki perubahan tampilan pada output yang dihasilkan
