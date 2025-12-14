@@ -6,6 +6,7 @@ Dosen Pengampu: Renny Pradina Kusumawardani
 Kelas: D
 
 Kelompok: 10
+
 | No | Nama                | NRP     |
 | -- | ------------------- | ------- |
 | 1  | Anggraita Prabawati | 5026241103 |
@@ -14,10 +15,8 @@ Kelompok: 10
 | 4  | Elfa Setiana        | 5026241208 |
 
 ## Latar Belakang
-Mata kuliah Algoritma Struktur Data merupakan mata kuliah dalam bidang komputasi yang berperan penting dalam membentuk pola pikir analitis dan terstruktur. Melalui mata kuliah ini, mahasiswa mempelajari bagaimana data direpresentasikan serta bagaimana algoritma dirancang untuk menyelesaikan permasalahan secara efisien.
-Dalam aktivitas akademik maupun sehari-hari, pengelolaan tugas yang terstruktur menjadi kebutuhan penting agar berbagai pekerjaan dapat diselesaikan secara efektif dan tepat waktu. Sering kali satu tugas utama memiliki beberapa subtask dengan tingkat prioritas dan batas waktu yang berbeda, sehingga diperlukan sistem yang mampu mengorganisasi tugas secara jelas dan sistematis.
-Berdasarkan permasalahan tersebut, kami membuat sebuah sistem yaitu To-Do List berbasis Algoritma dan Struktur Data sebagai implementasi konsep yang dipelajari dalam mata kuliah Algoritma dan Struktur Data. Sistem pencatatan tugas yang membantu pengguna mengelola task dan subtask, menentukan prioritas berdasarkan tingkatan level, serta menampilkan deadline terdekat. Dengan penerapan struktur data dan algoritma seperti Tree, List, Depth First Search (DFS), dan Bubble Sort. Sistem ini mampu menampilkan hubungan hierarki tugas secara jelas, menyusun prioritas secara sistematis, serta menampilkan tugas berdasarkan deadline terdekat sehingga pengelolaan tugas dapat dilakukan secara lebih optimal dan terencana.
-
+Pengelolaan tugas yang terstruktur menjadi kebutuhan penting agar berbagai pekerjaan dapat diselesaikan secara efektif dan tepat waktu. Dalam aktivitas akademik maupun sehari-hari, sering kali satu tugas utama memiliki beberapa subtask dengan tingkat prioritas dan batas waktu yang berbeda, sehingga diperlukan sistem yang mampu mengorganisasi tugas secara jelas dan sistematis.
+TO-DO LIST digunakan sebagai sistem pencatatan tugas yang membantu pengguna mengelola task dan subtask, menentukan prioritas berdasarkan tingkatan level, serta menampilkan deadline terdekat. Dengan penerapan struktur data dan algoritma seperti Depth First Search (DFS), dan Sorting, sistem ini mampu menampilkan hubungan hierarki tugas secara jelas, menyusun prioritas secara sistematis, serta menampilkan tugas berdasarkan deadline terdekat sehingga pengelolaan tugas dapat dilakukan secara lebih optimal dan terencana.
 
 ## Solusi yang Ditawarkan
 Solusi yang ditawarkan adalah sebuah program To-Do List yang menggunakan struktur data Tree untuk menampilkan hubungan antara task dan subtask secara terstruktur. Penerapan algoritma DFS untuk menampilkan detail task dan subtask, serta algoritma Sorting untuk mengurutkan task berdasarkan deadline terdekat. Dengan solusi ini, pengguna dapat lebih mudah menentukan prioritas dan mengelola tugas secara efektif.
@@ -43,9 +42,9 @@ Tree (ToDoList.Task & Subtask): Menyusun data tugas dalam bentuk hubungan bertin
 List: Sistem To-Do List menggunakan struktur data List dengan implementasi ArrayList untuk menyimpan subtask. Struktur ini bersifat dinamis, berurutan, dan memudahkan proses traversal menggunakan algoritma DFS secara rekursif.
 
 ## Bukti Tampilan Program (Code)
-![Bubble Sort](../File/BubbleSort.png)
+![Bubble Sort](File/BubbleSort.png)
 
-![Class](../File/Class.png)
+![Class](File/Class.png)
 
 ## Riwayat Update Program
 Berikut adalah riwayat update yang kami lakukan. Seluruh riwayat update di bawah ini tidak memiliki perubahan tampilan pada output yang dihasilkan

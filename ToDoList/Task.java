@@ -29,8 +29,8 @@ public class Task {
     public void updateProgress() {
         if (subtasks.isEmpty()) {
             progress = switch (status) {
-                case DONE -> 100;
-                case IN_PROGRESS -> 50;
+                case Status.DONE -> 100;
+                case Status.IN_PROGRESS -> 50;
                 default -> 0;
             };
         } else {
